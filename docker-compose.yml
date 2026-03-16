@@ -1,0 +1,16 @@
+services:
+  lp-thiago-lamberti:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: lp-thiago-lamberti:latest
+    container_name: lp-thiago-lamberti
+    restart: unless-stopped
+    ports:
+      - "9988:80"
+    networks:
+      - lp-network
+
+networks:
+  lp-network:
+    driver: bridge
