@@ -50,7 +50,7 @@ jobs:
       - name: Login GHCR (no servidor)
         run: |
           REPO_OWNER_LOWER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
-          echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${REPO_OWNER_LOWER} --password-stdin
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${REPO_OWNER_LOWER} --password-stdin
 
       - name: Pull da nova imagem
         run: |
