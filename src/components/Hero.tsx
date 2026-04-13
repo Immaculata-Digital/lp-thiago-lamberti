@@ -31,7 +31,18 @@ export default function Hero() {
                     Construindo uma vida que valha a pena ser vivida.
                 </h1>
                 <div className="hero-actions">
-                    <a href="https://wa.me/5511941321003?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20um%20hor%C3%A1rio%20de%20terapia." target="_blank" className="btn btn-primary">
+                    <a 
+                        href="https://wa.me/5511941321003?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20um%20hor%C3%A1rio%20de%20terapia." 
+                        onClick={(e) => {
+                            const url = e.currentTarget.href;
+                            if (typeof window !== 'undefined' && (window as any).gtag_report_conversion) {
+                                (window as any).gtag_report_conversion(url);
+                            }
+                        }}
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="btn btn-primary"
+                    >
                         AGENDAR CONSULTA
                     </a>
                 </div>
