@@ -18,7 +18,7 @@ export default function Navbar() {
 
     const navLinks = [
         { name: 'Início', href: '#' },
-        { name: 'A Dialética', href: '#dialectica' },
+        { name: 'Serviços', href: '#servicos' },
         { name: 'Sobre', href: '#sobre' },
     ];
 
@@ -35,7 +35,10 @@ export default function Navbar() {
                             priority
                         />
                     </div>
-                    <span className={`serif text-xl md:text-2xl font-medium tracking-tight transition-colors duration-300 ${scrolled ? 'text-primary' : 'text-white text-shadow-sm'}`}>
+                    <span 
+                        className={`serif text-xl md:text-2xl font-medium tracking-tight transition-colors duration-300 ${scrolled ? 'text-primary' : 'text-white text-shadow-sm'}`}
+                        style={{ fontWeight: 500 }}
+                    >
                         Thiago Lamberti
                     </span>
                 </Link>
@@ -51,7 +54,7 @@ export default function Navbar() {
                         </a>
                     ))}
                     <a 
-                        href="https://wa.me/5511941321003?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20um%20hor%C3%A1rio%20de%20terapia." 
+                        href="https://wa.me/5511941321003?text=Olá,%20gostaria%20de%20agendar%20uma%20Avaliação%20Técnica%20de%2015%20minutos." 
                         onClick={(e) => {
                             const url = e.currentTarget.href;
                             if (typeof window !== 'undefined' && (window as any).gtag_report_conversion) {
@@ -62,7 +65,7 @@ export default function Navbar() {
                         rel="noopener noreferrer"
                         className={`btn-premium py-2.5 px-8 text-sm ${scrolled ? 'btn-premium-scrolled' : 'btn-premium-initial'}`}
                     >
-                        AGENDAR
+                        AGENDAR AVALIAÇÃO
                     </a>
                 </div>
 
@@ -102,7 +105,7 @@ export default function Navbar() {
                         </a>
                     ))}
                     <a 
-                        href="https://wa.me/5511941321003?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20um%20hor%C3%A1rio%20de%20terapia." 
+                        href="https://wa.me/5511941321003?text=Olá,%20gostaria%20de%20agendar%20uma%20Avaliação%20Técnica%20de%2015%20minutos." 
                         onClick={(e) => {
                             setMobileMenuOpen(false);
                             const url = e.currentTarget.href;
@@ -114,7 +117,7 @@ export default function Navbar() {
                         rel="noopener noreferrer"
                         className="btn-premium w-full py-3 px-8 text-center btn-premium-scrolled"
                     >
-                        AGENDAR
+                        AGENDAR AVALIAÇÃO
                     </a>
                 </div>
             </div>

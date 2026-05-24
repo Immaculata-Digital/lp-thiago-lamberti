@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
+import ScrollRevealInit from "@/components/ScrollRevealInit";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -11,17 +12,17 @@ const inter = Inter({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#F9FDFD",
+  themeColor: "#08080C",
 };
 
 export const metadata: Metadata = {
-  title: "Thiago Lamberti | Terapeuta Comportamental",
-  description: "Especialista em Terapia Dialética Comportamental (DBT). Conquiste o domínio sobre suas emoções e transforme sua rotina com ferramentas científicas e acolhimento humano.",
-  keywords: ["Thiago Lamberti", "Terapeuta Comportamental", "Psicoterapeuta", "DBT", "Terapia Dialética Comportamental", "Equilíbrio Emocional"],
+  title: "Thiago Lamberti | Arquitetura de Software & IA",
+  description: "Consultoria técnica sênior (PJ) para eliminar gargalos de infraestrutura, otimizar servidores e integrar LLMs aos seus processos operacionais.",
+  keywords: ["Thiago Lamberti", "Consultoria de TI", "Arquitetura de Software", "Inteligência Artificial", "DevOps", "Docker", "Portainer", "Nginx", "n8n", "Python", "LLMs", "Consultor PJ"],
   authors: [{ name: "Thiago Lamberti" }],
   openGraph: {
-    title: "Thiago Lamberti | Terapeuta Comportamental",
-    description: "Conquiste o domínio sobre suas emoções e transforme sua rotina com ferramentas científicas e acolhimento humano.",
+    title: "Thiago Lamberti | Arquitetura de Software & IA",
+    description: "Arquitetura de Software e Inteligência Artificial sob demanda para empresas que precisam escalar sem quebrar.",
     type: "website",
     locale: "pt_BR",
   },
@@ -33,8 +34,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `document.documentElement.classList.add('js-enabled');`,
+          }}
+        />
         <Script
           async
           src="https://www.googletagmanager.com/gtag/js?id=AW-18082855554"
@@ -67,6 +73,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable}`}>
         {children}
+        <ScrollRevealInit />
       </body>
     </html>
   );
