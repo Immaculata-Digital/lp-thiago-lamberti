@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Navbar from "@/components/Navbar";
+import WhatsAppButton from "@/components/WhatsAppButton";
 import styles from "./page.module.css";
 
 const aulas = [
@@ -670,6 +671,7 @@ export default function MiniCursoBlogN8N() {
         </footer>
       </section>
     </main>
+    <WhatsAppButton />
     </>
   );
 }
