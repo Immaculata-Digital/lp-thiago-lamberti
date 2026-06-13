@@ -7,14 +7,20 @@ export default function Cursos() {
         <section id="cursos" className="dark-section" style={{ 
             width: '100%', 
             maxWidth: 'none', 
-            padding: '120px 24px',
+            minHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '60px 24px',
             backgroundImage: "linear-gradient(rgba(8,8,12,0.72), rgba(8,8,12,0.88)), url('/hero-bg-texture.png')",
             backgroundSize: "cover",
             backgroundPosition: "center top",
             backgroundRepeat: "no-repeat",
             backgroundAttachment: "fixed",
             borderTop: '1px solid rgba(255, 255, 255, 0.04)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.04)'
+            borderBottom: '1px solid rgba(255, 255, 255, 0.04)',
+            boxSizing: 'border-box'
         }}>
             <div className="container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <div className="text-center mb-16 reveal-on-scroll reveal-blur-in" style={{ maxWidth: '800px' }}>
