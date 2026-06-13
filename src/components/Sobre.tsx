@@ -6,10 +6,12 @@ export default function Sobre() {
             width: '100%', 
             maxWidth: 'none', 
             padding: '120px 24px', 
-            backgroundColor: '#ffffff',
-            backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(207, 170, 105, 0.06) 0%, transparent 65%), linear-gradient(to right, rgba(207, 170, 105, 0.025) 1px, transparent 1px), linear-gradient(to bottom, rgba(207, 170, 105, 0.025) 1px, transparent 1px)',
-            backgroundSize: '100% 100%, 60px 60px, 60px 60px',
+            backgroundColor: '#f9fdfd',
+            backgroundImage: "url('/aulas-bg-texture.png')",
+            backgroundSize: 'cover',
             backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            backgroundAttachment: 'fixed',
             position: 'relative'
         }}>
             <div className="container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
