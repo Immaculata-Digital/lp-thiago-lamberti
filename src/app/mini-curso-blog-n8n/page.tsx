@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Navbar from "@/components/Navbar";
 import styles from "./page.module.css";
 
 const aulas = [
@@ -164,7 +165,9 @@ export default function MiniCursoBlogN8N() {
   }, []);
 
   return (
-    <main className={styles.page}>
+    <>
+      <Navbar />
+      <main className={styles.page}>
       {/* ─── HERO ─── */}
       <section
         ref={heroRef}
@@ -667,5 +670,6 @@ export default function MiniCursoBlogN8N() {
         </footer>
       </section>
     </main>
+    </>
   );
 }

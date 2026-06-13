@@ -17,9 +17,10 @@ export default function Navbar() {
     }, []);
 
     const navLinks = [
-        { name: 'Início', href: '#' },
-        { name: 'Serviços', href: '#servicos' },
-        { name: 'Sobre', href: '#sobre' },
+        { name: 'Início', href: '/' },
+        { name: 'Serviços', href: '/#servicos' },
+        { name: 'Sobre', href: '/#sobre' },
+        { name: 'Cursos', href: '/#cursos' },
     ];
 
     return (
