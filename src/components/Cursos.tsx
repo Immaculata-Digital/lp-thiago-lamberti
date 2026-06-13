@@ -36,9 +36,6 @@ export default function Cursos() {
                     }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
                             <div>
-                                <span className="inline-block py-1 px-3 rounded bg-accent/10 text-accent uppercase tracking-wider text-[10px] font-bold mb-3 border border-accent/20">
-                                    Inscrições Abertas
-                                </span>
                                 <h3 className="serif text-white font-semibold mb-2" style={{ fontSize: '1.6rem', lineHeight: '1.25' }}>
                                     Mini-curso: Automação de Conteúdo &amp; IA
                                 </h3>
