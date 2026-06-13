@@ -57,13 +57,12 @@ export default function Cursos() {
                                 <BookOpen className="text-accent" size={28} />
                             </div>
                         </div>
-
                         <p style={{ color: '#94a3b8', fontSize: '0.95rem', lineHeight: '1.7', margin: 0 }}>
                             Aprenda a conectar o n8n e o ChatGPT para buscar notícias da internet, redigir artigos completos e originais, gerar imagens automaticamente e publicar diretamente no seu blog, sem a necessidade de experiência em programação.
                         </p>
 
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                            {['n8n', 'ChatGPT', 'Automações', 'Docker', 'WordPress'].map(tech => (
+                            {['n8n', 'ChatGPT', 'Automações', 'Docker'].map(tech => (
                                 <span key={tech} style={{ 
                                     padding: '4px 12px', 
                                     borderRadius: '100px', 
