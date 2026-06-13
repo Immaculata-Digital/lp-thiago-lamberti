@@ -3,6 +3,7 @@ import Hero from "@/components/Hero";
 import Servicos from "@/components/Servicos";
 import Diferencial from "@/components/Diferencial";
 import Sobre from "@/components/Sobre";
+import Cursos from "@/components/Cursos";
 import CTA from "@/components/CTA";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
@@ -14,6 +15,7 @@ export default function Home() {
       <Servicos />
       <Diferencial />
       <Sobre />
+      <Cursos />
       <CTA />
       <WhatsAppButton />
     </main>
