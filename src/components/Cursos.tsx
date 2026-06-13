@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { BookOpen, Clock, Award, ArrowRight } from 'lucide-react';
+import { BookOpen, Clock, Award, ArrowRight, Video } from 'lucide-react';
 
 export default function Cursos() {
     return (
@@ -98,6 +98,10 @@ export default function Cursos() {
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#94a3b8', fontSize: '0.875rem' }}>
                                     <Award size={16} className="text-accent" />
                                     <span>Com certificado</span>
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#94a3b8', fontSize: '0.875rem' }}>
+                                    <Video size={16} className="text-accent" />
+                                    <span>Ao vivo pelo Google Meet</span>
                                 </div>
                             </div>
 
