@@ -8,7 +8,11 @@ export default function Cursos() {
             width: '100%', 
             maxWidth: 'none', 
             padding: '120px 24px',
-            backgroundColor: '#08080C',
+            backgroundImage: "linear-gradient(rgba(8,8,12,0.72), rgba(8,8,12,0.88)), url('/hero-bg-texture.png')",
+            backgroundSize: "cover",
+            backgroundPosition: "center top",
+            backgroundRepeat: "no-repeat",
+            backgroundAttachment: "fixed",
             borderTop: '1px solid rgba(255, 255, 255, 0.04)',
             borderBottom: '1px solid rgba(255, 255, 255, 0.04)'
         }}>
