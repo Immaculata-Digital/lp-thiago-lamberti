@@ -71,17 +71,10 @@ jobs:
           REPO_OWNER_LOWER=$(echo "${{ env.REPO_OWNER }}" | tr '[:upper:]' '[:lower:]')
           echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${REPO_OWNER_LOWER} --password-stdin
 
-      - name: 🔑 Set up SSH Private Key
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY_MAIN }}
-        run: |
-          mkdir -p .kamal/ssh
-          printf "%s\n" "$SSH_PRIVATE_KEY" | tr -d '\r' > .kamal/ssh/id_ed25519
-          chmod 600 .kamal/ssh/id_ed25519
-          if ! ssh-keygen -y -f .kamal/ssh/id_ed25519 >/dev/null; then
-            echo "❌ ERRO: A chave SSH configurada no segredo VPS_SSH_PRIVATE_KEY_MAIN do GitHub é inválida ou está mal formatada!"
-            exit 1
-          fi
+      - name: 🚀 Set up SSH Agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
 
       - name: 📝 Create Kamal Secrets File
         run: |
@@ -97,9 +90,11 @@ jobs:
         run: |
           docker run --rm \
             -v "${PWD}:/workdir" \
-            -v "${PWD}/.kamal/ssh/id_ed25519:/root/.ssh/id_ed25519:ro" \
+            -v "${SSH_AUTH_SOCK}:/ssh-agent" \
             -v /var/run/docker.sock:/var/run/docker.sock \
+            -e SSH_AUTH_SOCK="/ssh-agent" \
             ghcr.io/basecamp/kamal:latest deploy -d production -P --version=${IMAGE_TAG}
+
 
       - name: 🩺 Verify Public Health (Kamal)
         run: |
