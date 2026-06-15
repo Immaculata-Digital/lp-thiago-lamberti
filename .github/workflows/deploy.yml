@@ -5,21 +5,30 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   build_and_push:
     name: Build & Push Image to GHCR
     runs-on: ubuntu-latest
-
-    env:
-      IMAGE_NAME: lp-thiago-lamberti
-
-    permissions:
-      contents: read
-      packages: write
+    outputs:
+      image_tag: main-${{ steps.vars.outputs.sha_short }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Set variables
+        id: vars
+        run: |
+          echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          echo "repo_owner_lower=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
 
       - name: Login GHCR
         uses: docker/login-action@v3
@@ -28,49 +37,96 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build imagem
+      - name: Build and push image
         run: |
-          REPO_OWNER_LOWER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
-          docker build -t ghcr.io/${REPO_OWNER_LOWER}/${IMAGE_NAME}:latest .
-
-      - name: Push imagem
-        run: |
-          REPO_OWNER_LOWER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          REPO_OWNER_LOWER="${{ steps.vars.outputs.repo_owner_lower }}"
+          IMAGE_NAME="lp-thiago-lamberti"
+          TAG_SHA="main-${{ steps.vars.outputs.sha_short }}"
+          
+          docker build -t ghcr.io/${REPO_OWNER_LOWER}/${IMAGE_NAME}:${TAG_SHA} -t ghcr.io/${REPO_OWNER_LOWER}/${IMAGE_NAME}:latest .
+          docker push ghcr.io/${REPO_OWNER_LOWER}/${IMAGE_NAME}:${TAG_SHA}
           docker push ghcr.io/${REPO_OWNER_LOWER}/${IMAGE_NAME}:latest
 
   deploy:
-    name: Pull & Run on Server
+    name: Deploy to Production via Kamal 2
     runs-on: [self-hosted, production]
     needs: build_and_push
-
     env:
       IMAGE_NAME: lp-thiago-lamberti
+      IMAGE_TAG: ${{ needs.build_and_push.outputs.image_tag }}
+      REPO_OWNER: ${{ github.repository_owner }}
 
     steps:
-      - name: Login GHCR (no servidor)
-        run: |
-          REPO_OWNER_LOWER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${REPO_OWNER_LOWER} --password-stdin
+      - name: Fix Workspace Permissions
+        run: sudo chown -R $(whoami):$(id -gn) . || true
 
-      - name: Pull da nova imagem
-        run: |
-          REPO_OWNER_LOWER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
-          docker pull ghcr.io/${REPO_OWNER_LOWER}/${IMAGE_NAME}:latest
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          clean: true
 
-      - name: Parar e remover container antigo
+      - name: Login to GHCR
         run: |
-          docker stop ${IMAGE_NAME} || true
-          docker rm ${IMAGE_NAME} || true
+          REPO_OWNER_LOWER=$(echo "${{ env.REPO_OWNER }}" | tr '[:upper:]' '[:lower:]')
+          echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${REPO_OWNER_LOWER} --password-stdin
 
-      - name: Subir container novo
+      - name: 🔑 Set up SSH Private Key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY_MAIN }}
         run: |
-          REPO_OWNER_LOWER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
-          docker run -d \
-            --name ${IMAGE_NAME} \
-            --restart unless-stopped \
-            -p 9988:80 \
-            ghcr.io/${REPO_OWNER_LOWER}/${IMAGE_NAME}:latest
+          mkdir -p .kamal/ssh
+          printf "%s\n" "$SSH_PRIVATE_KEY" | tr -d '\r' > .kamal/ssh/id_ed25519
+          chmod 600 .kamal/ssh/id_ed25519
+          if ! ssh-keygen -y -f .kamal/ssh/id_ed25519 >/dev/null; then
+            echo "❌ ERRO: A chave SSH configurada no segredo VPS_SSH_PRIVATE_KEY_MAIN do GitHub é inválida ou está mal formatada!"
+            exit 1
+          fi
 
-      - name: Limpeza de imagens antigas
+      - name: 📝 Create Kamal Secrets File
         run: |
-          docker image prune -f || true
+          mkdir -p .kamal
+          echo "KAMAL_REGISTRY_PASSWORD=${{ secrets.GHCR_TOKEN }}" > .kamal/secrets-common
+
+      - name: 🌐 Ensure Docker network exists
+        run: |
+          docker network inspect marshall-network >/dev/null 2>&1 || docker network create marshall-network
+          echo "✅ Rede marshall-network pronta."
+
+      - name: 🚀 Deploy via Kamal 2
+        run: |
+          docker run --rm \
+            -v "${PWD}:/workdir" \
+            -v "${PWD}/.kamal/ssh/id_ed25519:/root/.ssh/id_ed25519:ro" \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            ghcr.io/basecamp/kamal:latest deploy -d production -P --version=${IMAGE_TAG}
+
+      - name: 🩺 Verify Public Health (Kamal)
+        run: |
+          HEALTH_URL="https://thiagolamberti.com.br/health"
+          SLEEP_TIME=2
+          for i in {1..8}; do
+            echo "🩺 Tentativa $i/8 em ${HEALTH_URL}..."
+            STATUS=$(curl -sS -o /tmp/lp-thiago-lamberti-health-body -w "%{http_code}" "$HEALTH_URL" || echo "CURL_FAILED")
+            if [ "$STATUS" = "CURL_FAILED" ]; then
+              echo "⚠️ Conexão falhou, aguardando ${SLEEP_TIME}s..."
+            else
+              BODY=$(cat /tmp/lp-thiago-lamberti-health-body)
+              if [ "$STATUS" = "200" ]; then
+                echo "✅ App production saudável via kamal-proxy (HTTP $STATUS)"
+                exit 0
+              fi
+              echo "⚠️ Status $STATUS — resposta: $BODY"
+            fi
+            sleep $SLEEP_TIME
+            SLEEP_TIME=$((SLEEP_TIME * 2))
+          done
+          echo "❌ Healthcheck público falhou após deploy Kamal."
+          exit 1
+
+      - name: 🧹 Post-Deployment Resource Cleanup
+        if: always()
+        run: |
+          rm -rf .kamal
+          docker image prune -f --filter "label=service=lp-thiago-lamberti" || true
+

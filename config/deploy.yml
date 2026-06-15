@@ -1,0 +1,15 @@
+# config/deploy.yml
+service: lp-thiago-lamberti
+image: immaculata-digital/lp-thiago-lamberti
+
+registry:
+  server: ghcr.io
+  username: immaculata-digital
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+ssh:
+  user: <%= ENV["VPS_USER"] || "root" %>
+
+builder:
+  arch: amd64
