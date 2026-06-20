@@ -21,6 +21,7 @@ export default function Navbar() {
         { name: 'Serviços', href: '/#servicos' },
         { name: 'Sobre', href: '/#sobre' },
         { name: 'Cursos', href: '/#cursos' },
+        { name: 'Currículo', href: '/curriculo' },
     ];
 
     return (
