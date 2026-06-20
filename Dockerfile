@@ -27,6 +27,10 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 # Expor porta
 EXPOSE 80
 
+# Label obrigatória para o Kamal identificar o serviço
+LABEL service="lp-thiago-lamberti"
+
+
 # Healthcheck
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
   CMD wget --quiet --tries=1 --spider http://127.0.0.1/ || exit 1
