@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
@@ -17,13 +17,318 @@ import {
   Code,
   Brain,
   Calendar,
-  Building2,
-  ExternalLink
+  Building2
 } from "lucide-react";
 
+// Translation data structure
+const translations = {
+  pt: {
+    backHome: "Voltar ao Início",
+    downloadPt: "PDF (PT)",
+    downloadEn: "PDF (EN)",
+    role: "Engenheiro de Software Sênior",
+    location: "São Paulo - SP, Brasil",
+    aboutTitle: "Sobre Mim",
+    aboutText: "Sou Engenheiro de Software Sênior com sólida experiência liderando equipes técnicas, arquitetando soluções escaláveis e integrando inteligência artificial para otimização de processos de negócio. Focado em alinhar excelência técnica com impacto operacional, domino o ciclo completo de desenvolvimento de software: desde a concepção da infraestrutura em nuvem (Docker, CI/CD) até o desenvolvimento robusto do backend (NodeJS, Python, C# .NET) e frontend (React, Next.js). Sou cofundador de iniciativas digitais e especialista em solucionar gargalos complexos de dados e sistemas legados por meio de processos claros, automações ágeis (Scrum) e inovação pragmática.",
+    hardSkillsTitle: "Hard Skills",
+    hardSkills: [
+      "Arquitetura de Software",
+      "Desenvolvimento Backend",
+      "Desenvolvimento Front-end",
+      "NodeJS",
+      "C# ASP.NET Core",
+      "Python",
+      "React",
+      "Next.js",
+      "Vite",
+      "TypeScript / JavaScript",
+      "PostgreSQL",
+      "SQL Server",
+      "Oracle SQL",
+      "Google Cloud Platform",
+      "Docker / Containers",
+      "Linux",
+      "Integração de IA (LLMs)",
+      "CI/CD (CircleCI)",
+      "Lógica de programação",
+      "Git & TFS",
+      "Inglês (Avançado)"
+    ],
+    softSkillsTitle: "Soft Skills",
+    softSkills: [
+      "Liderança Técnica",
+      "Comunicação Eficiente",
+      "Proatividade",
+      "Resolução de Problemas",
+      "Gestão de Prioridades",
+      "Organização Ágil",
+      "Adaptabilidade Tecnológica",
+      "Trabalho em Equipe",
+      "Criatividade"
+    ],
+    educationTitle: "Educação",
+    educationItems: [
+      {
+        degree: "Bacharel em Sistemas de Informação",
+        school: "Fundação Santo André",
+        date: "2014 - 2017"
+      },
+      {
+        degree: "Pós-graduação em Projetos de Aplicativos Móveis Multiplataforma",
+        school: "Descomplica Faculdade Digital",
+        date: "2023 - 2024"
+      }
+    ],
+    continuousTitle: "Desenvolvimento Contínuo & Negócios",
+    continuousItems: [
+      "Wise Minds - Prof. Murilo Frizanco (Permanente)",
+      "Escola de Formação de Líderes - Instituto LIBCOM (2017)",
+      "Comunidade Priscilla Zillo (Lançamentos Digitais)",
+      "Escola da Co-produção (Mac Carvalho)"
+    ],
+    experienceTitle: "Experiência Profissional",
+    experiences: [
+      {
+        role: "Engenheiro de Software Sênior",
+        company: "Immaculata Digital",
+        date: "Novembro de 2025 - Atualmente",
+        bullets: [
+          "<strong>Arquitetura e Engenharia de Dados:</strong> Desenho e implantação de infraestrutura assíncrona com RabbitMQ para orquestração de processamento de disparos massivos em segundo plano (Workers) sem concorrência ou travamentos no banco de dados.",
+          "<strong>Persistência Híbrida:</strong> Fluxo operacional resiliente dividindo o tráfego volátil em mensageria rápida e a persistência histórica de auditoria e métricas em banco de dados relacional PostgreSQL.",
+          "<strong>Multi-Tenancy Corporativa:</strong> Sustentação de arquitetura multi-tenant robusta para isolamento lógico e gestão segura de múltiplos CNPJs, holdings e franquias sob controle de acesso baseado em funções (RBAC).",
+          "<strong>Microsserviços Dinâmicos:</strong> Engenharia de microsserviços e Workers que interpretam chaves e parametrizações externas dinâmicas em tempo de execução para cada inquilino (tenant).",
+          "<strong>IA e Engenharia de IA (AI Engineering):</strong> Orquestração e implantação local dedicada do modelo Gemma (Google) para privacidade de dados corporativos e redução drástica de custos operacionais com APIs pagas.",
+          "<strong>Contextualização de Negócio com IA:</strong> Integração de modelos de linguagem locais para inteligência cruzada entre os módulos de gestão e fidelidade, gerando textos analíticos e respostas preditivas automáticas.",
+          "<strong>Componentização No-Code:</strong> Desenvolvimento de módulo construtor visual de sites (arrastar e soltar) integrado a APIs de relacionamento e CRM em tempo real.",
+          "<strong>Vertical Food Service:</strong> Engenharia ponta a ponta da vertical para restaurantes conectando cardápios digitais dinâmicos, mapeamento físico de mesas e sistema de telas de produção de cozinha (KDS) em tempo real.",
+          "<strong>Renderização Híbrida e SEO/AIO:</strong> Otimização de performance web com Next.js (App Router), SSR/SSG e Core Web Vitals, além de estruturação de metadados semânticos avançados (Schema Markup) para otimização de buscas tradicionais e por modelos de IA (AIO)."
+        ]
+      },
+      {
+        role: "Engenheiro de Software Sênior / Tech Lead",
+        company: "Taxation Mind",
+        date: "2023 - Novembro de 2025",
+        bullets: [
+          "Liderança técnica de equipes de desenvolvimento integrando metodologias ágeis (Scrum/Kanban) para acelerar entregas de produtos.",
+          "Implementação pioneira de Inteligência Artificial Generativa e fine-tuning de modelos LLM (OpenAI) em processos analíticos e fluxos internos da empresa.",
+          "Desenvolvimento de sistemas robustos Full Stack ponta a ponta utilizando NodeJS, Python e bibliotecas modernas baseadas em React.",
+          "Liderança de processos de transformação e migração estruturada de dados em larga escala a partir de sistemas legados.",
+          "Atuação em engenharia tributária e contábil como Product Owner, garantindo alinhamento fino entre regras de negócio complexas e soluções tecnológicas.",
+          "Concepção, refinamento e manutenção de base de dados relacionais PostgreSQL complexos (operações DDL e DML de alto desempenho).",
+          "Desenho e execução de pipelines de dados integrados (ETL) utilizando ferramentas como Pentaho Kettle.",
+          "Orquestração e conteneirização de serviços de infraestrutura corporativos baseados em Docker e distribuições Linux.",
+          "Criação, parametrização e manutenção de relatórios operacionais críticos em Jasper Reports."
+        ]
+      },
+      {
+        role: "Desenvolvedor Fullstack Sênior / Arquiteto",
+        company: "SinergyRH",
+        date: "2022 - 2023",
+        bullets: [
+          "Análise de impacto técnico e desenvolvimento de arquiteturas escaláveis para processamento de folhas de pagamento em lote usando stack C# .NET MVC.",
+          "Estruturação e otimização de queries, views e procedures de banco de dados SQL Server de alto desempenho.",
+          "Colaboração direta com equipes de Engenharia de Produto para especificação refinada de demandas e transformação de especificações em arquitetura de software sólida.",
+          "Parceria próxima com times de QA (Testes) e Suporte Técnico N3 garantindo o cumprimento de Service Level Agreements (SLA) e alta qualidade geral de software.",
+          "Gerenciamento de repositórios distribuídos e versionamento estruturado utilizando TFS (Team Foundation Server)."
+        ]
+      },
+      {
+        role: "Engenheiro de Software Fullstack",
+        company: "Câmara dos Deputados",
+        date: "2019 - 2022",
+        bullets: [
+          "Concepção, arquitetura e desenvolvimento de sistemas integrados corporativos Web e Mobile rodando em arquiteturas resilientes de microsserviços.",
+          "Modelagem de banco de dados relacionais PostgreSQL e versionamento contínuo sob padrão rigoroso de Gitflow.",
+          "Facilitação de ritos ágeis (Scrum/Kanban) e organização de fluxos de trabalho para otimizar as entregas e a coordenação do time técnico.",
+          "Mapeamento técnico e levantamento ágil de requisitos e necessidades diretamente com stakeholders, usuários chave e órgãos técnicos solicitantes.",
+          "Exercício de articulação técnica e comunicação executiva facilitando decisões em múltiplos níveis de governança de TI."
+        ]
+      },
+      {
+        role: "Desenvolvedor Fullstack C# .NET",
+        company: "Prescon Informática e Assessoria",
+        date: "2018 - 2019",
+        bullets: [
+          "Desenvolvimento fullstack de plataformas Web corporativas na área da saúde pública e privada com foco em ASP.NET (C#) e injeção assíncrona de JavaScript, HTML5 e CSS3.",
+          "Esquemas de dados complexos: criação de Stored Procedures, Views de consolidação, triggers reativas, além de políticas de backup/restore sob infraestruturas Microsoft SQL Server.",
+          "Gerenciamento automatizado de migrações estruturais de bancos de dados via SQL Source Control e versionamento de código no Plastic SCM.",
+          "Resolução analítica de conflitos de migração com ApexSQL Diff e exportação direta de dados de auditoria integrados a planilhas Excel/Google Sheets."
+        ]
+      },
+      {
+        role: "Engenheiro de Dados e Sistemas / Auditor de TI",
+        company: "GOL Linhas Aéreas Inteligentes",
+        date: "2015 - 2018",
+        bullets: [
+          "Desenvolvimento de automações corporativas e relatórios de BI avançados utilizando algoritmos em VBA integrados diretamente com bases de dados relacionais corporativas Oracle SQL.",
+          "Construção de rotinas integradas e relatórios gerenciais focados em regras de negócio complexas a partir do ERP SAP.",
+          "Estruturação e extração automatizada de dados em ambientes Oracle, operando com ACL Analytics e scripts personalizados em SQL.",
+          "Execução técnica de auditorias de TI internas, levantamento de evidências computacionais corporativas e análise de conformidade de infraestrutura.",
+          "Validação técnica e documentação especializada para certificações globais corporativas sob frameworks COBIT e normas da Lei Sarbanes-Oxley (SOX)."
+        ]
+      }
+    ]
+  },
+  en: {
+    backHome: "Back to Home",
+    downloadPt: "PDF (PT)",
+    downloadEn: "PDF (EN)",
+    role: "Senior Software Engineer",
+    location: "São Paulo - SP, Brazil",
+    aboutTitle: "About Me",
+    aboutText: "I am a Senior Software Engineer with solid experience leading technical teams, architecting scalable solutions, and integrating artificial intelligence to optimize business processes. Focused on aligning technical excellence with operational impact, I master the complete software development lifecycle: from cloud infrastructure design (Docker, CI/CD) to robust backend development (NodeJS, Python, C# .NET) and frontend development (React, Next.js). I am a co-founder of digital initiatives and a specialist in resolving complex data bottlenecks and legacy systems through clear processes, agile automation (Scrum), and pragmatic innovation.",
+    hardSkillsTitle: "Hard Skills",
+    hardSkills: [
+      "Software Architecture",
+      "Backend Development",
+      "Frontend Development",
+      "NodeJS",
+      "C# ASP.NET Core",
+      "Python",
+      "React",
+      "Next.js",
+      "Vite",
+      "TypeScript / JavaScript",
+      "PostgreSQL",
+      "SQL Server",
+      "Oracle SQL",
+      "Google Cloud Platform",
+      "Docker / Containers",
+      "Linux",
+      "AI Integration (LLMs)",
+      "CI/CD (CircleCI)",
+      "Programming Logic",
+      "Git & TFS",
+      "English (Fluent)"
+    ],
+    softSkillsTitle: "Soft Skills",
+    softSkills: [
+      "Technical Leadership",
+      "Efficient Communication",
+      "Proactivity",
+      "Problem Solving",
+      "Priority Management",
+      "Agile Organization",
+      "Technological Adaptability",
+      "Teamwork",
+      "Creativity"
+    ],
+    educationTitle: "Education",
+    educationItems: [
+      {
+        degree: "Bachelor of Science in Information Systems",
+        school: "Fundação Santo André",
+        date: "2014 - 2017"
+      },
+      {
+        degree: "Postgraduate Degree in Multiplatform Mobile Application Projects",
+        school: "Descomplica Faculdade Digital",
+        date: "2023 - 2024"
+      }
+    ],
+    continuousTitle: "Continuous Development & Business",
+    continuousItems: [
+      "Wise Minds - Prof. Murilo Frizanco (Permanent)",
+      "Leadership Training School - LIBCOM Institute (2017)",
+      "Priscilla Zillo Community (Digital Launches)",
+      "Co-production School (Mac Carvalho)"
+    ],
+    experienceTitle: "Professional Experience",
+    experiences: [
+      {
+        role: "Senior Software Engineer",
+        company: "Immaculata Digital",
+        date: "November 2025 - Present",
+        bullets: [
+          "<strong>Data Architecture & Engineering:</strong> Designed and implemented asynchronous infrastructure with RabbitMQ for orchestrating mass dispatch processing in the background (Workers) without database concurrency or blocking.",
+          "<strong>Hybrid Persistence:</strong> Resilient operational workflow splitting volatile traffic into fast messaging and historical persistence of audits and metrics in a PostgreSQL relational database.",
+          "<strong>Corporate Multi-Tenancy:</strong> Maintained a robust multi-tenant architecture for logical isolation and secure management of multiple company entities (CNPJs), holdings, and franchises under Role-Based Access Control (RBAC).",
+          "<strong>Dynamic Microservices:</strong> Engineered microservices and Workers that interpret external dynamic keys and settings at runtime for each tenant.",
+          "<strong>AI & AI Engineering:</strong> Orchestrated and deployed a local dedicated instance of the Gemma model (Google) to ensure corporate data privacy and drastically reduce operational costs with paid APIs.",
+          "<strong>Business Contextualization with AI:</strong> Integrated local language models for cross-intelligence between management and loyalty modules, automatically generating analytical texts and predictive responses.",
+          "<strong>No-Code Componentization:</strong> Developed a visual website builder module (drag-and-drop) integrated with real-time CRM and relationship APIs.",
+          "<strong>Food Service Vertical:</strong> Built end-to-end food service vertical features for restaurants, connecting dynamic digital menus, physical table mapping, and real-time Kitchen Display Systems (KDS).",
+          "<strong>Hybrid Rendering and SEO/AIO:</strong> Optimized web performance using Next.js (App Router), SSR/SSG, and Core Web Vitals, in addition to structuring advanced semantic metadata (Schema Markup) for traditional and AI-based search engine optimization (AIO)."
+        ]
+      },
+      {
+        role: "Senior Software Engineer / Tech Lead",
+        company: "Taxation Mind",
+        date: "2023 - November 2025",
+        bullets: [
+          "Technical leadership of development teams integrating agile methodologies (Scrum/Kanban) to accelerate product delivery.",
+          "Pioneered the implementation of Generative Artificial Intelligence and fine-tuning of LLM models (OpenAI) in analytical processes and internal workflows.",
+          "Full-stack development of robust systems using NodeJS, Python, and React-based libraries.",
+          "Led structured, large-scale data transformation and migration processes from legacy systems.",
+          "Acted as a Product Owner in tax and accounting engineering, ensuring close alignment between complex business rules and technological solutions.",
+          "Conceived, refined, and maintained complex PostgreSQL relational databases (high-performance DDL and DML operations).",
+          "Designed and executed integrated data pipelines (ETL) using tools like Pentaho Kettle.",
+          "Orchestrated and containerized corporate infrastructure services using Docker and Linux distributions.",
+          "Created, parameterized, and maintained critical operational reports in Jasper Reports."
+        ]
+      },
+      {
+        role: "Senior Fullstack Developer / Architect",
+        company: "SinergyRH",
+        date: "2022 - 2023",
+        bullets: [
+          "Analyzed technical impact and developed scalable architectures for batch payroll processing using C# .NET MVC stack.",
+          "Structured and optimized high-performance SQL Server database queries, views, and procedures.",
+          "Collaborated directly with Product Engineering teams for refined specification of demands and transformation of specifications into solid software architecture.",
+          "Worked in close partnership with QA (Testing) and N3 Technical Support teams, ensuring compliance with Service Level Agreements (SLAs) and overall high software quality.",
+          "Managed distributed repositories and structured version control using TFS (Team Foundation Server)."
+        ]
+      },
+      {
+        role: "Fullstack Software Engineer",
+        company: "Câmara dos Deputados",
+        date: "2019 - 2022",
+        bullets: [
+          "Conceived, architected, and developed integrated corporate Web and Mobile systems running on resilient microservices architectures.",
+          "Modeled PostgreSQL relational databases and implemented continuous version control under a strict Gitflow standard.",
+          "Facilitated agile rituals (Scrum/Kanban) and organized workflows to optimize deliveries and technical team coordination.",
+          "Conducted technical mapping and agile gathering of requirements and needs directly with stakeholders, key users, and requesting technical bodies.",
+          "Exercised technical articulation and executive communication to facilitate decision-making across multiple levels of IT governance."
+        ]
+      },
+      {
+        role: "C# .NET Fullstack Developer",
+        company: "Prescon Informática e Assessoria",
+        date: "2018 - 2019",
+        bullets: [
+          "Full-stack development of corporate Web platforms in public and private health sectors focusing on ASP.NET (C#) and asynchronous injection of JavaScript, HTML5, and CSS3.",
+          "Complex data schemas: created Stored Procedures, consolidation Views, reactive triggers, and backup/restore policies under Microsoft SQL Server infrastructures.",
+          "Automated management of database schema migrations via SQL Source Control and code versioning in Plastic SCM.",
+          "Analytical resolution of migration conflicts with ApexSQL Diff and direct export of integrated audit data to Excel/Google Sheets."
+        ]
+      },
+      {
+        role: "Data & Systems Engineer / IT Auditor",
+        company: "GOL Linhas Aéreas Inteligentes",
+        date: "2015 - 2018",
+        bullets: [
+          "Developed corporate automations and advanced BI reports using VBA algorithms integrated directly with Oracle SQL corporate relational databases.",
+          "Built integrated routines and management reports focused on complex business rules extracted from SAP ERP.",
+          "Structured and automated data extraction in Oracle environments, operating with ACL Analytics and custom SQL scripts.",
+          "Technical execution of internal IT audits, gathering of computational evidence, and analysis of infrastructure compliance.",
+          "Technical validation and specialized documentation for global corporate certifications under COBIT frameworks and Sarbanes-Oxley Act (SOX) regulations."
+        ]
+      }
+    ]
+  }
+};
+
 export default function CurriculoPage() {
-  const handlePrint = () => {
-    window.print();
+  const [language, setLanguage] = useState<"pt" | "en">("pt");
+
+  const t = translations[language];
+
+  const handlePrint = (lang: "pt" | "en") => {
+    // Switch to target language to print correct version
+    setLanguage(lang);
+    setTimeout(() => {
+      window.print();
+    }, 150);
   };
 
   return (
@@ -73,31 +378,102 @@ export default function CurriculoPage() {
               className="hover-gold-border"
             >
               <ArrowLeft size={16} className="text-accent" />
-              Voltar ao Início
+              {t.backHome}
             </Link>
 
-            <button
-              onClick={handlePrint}
-              style={{
+            {/* Right side controls (Language Selector + Download Buttons) */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+              {/* Language Switcher Pill */}
+              <div style={{
                 display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                backgroundColor: 'var(--accent)',
-                color: '#08080C',
-                border: 'none',
-                fontWeight: 600,
-                fontSize: '0.95rem',
-                padding: '12px 28px',
+                backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
                 borderRadius: '100px',
-                cursor: 'pointer',
-                boxShadow: '0 10px 20px rgba(207, 170, 105, 0.25)',
-                transition: 'all 0.3s ease'
-              }}
-              className="btn-print-action"
-            >
-              <Download size={18} />
-              Baixar Currículo em PDF
-            </button>
+                padding: '4px',
+                gap: '4px'
+              }}>
+                <button
+                  onClick={() => setLanguage("pt")}
+                  style={{
+                    padding: '6px 14px',
+                    borderRadius: '100px',
+                    border: 'none',
+                    fontSize: '0.85rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    backgroundColor: language === 'pt' ? 'var(--accent)' : 'transparent',
+                    color: language === 'pt' ? '#08080C' : 'rgba(255, 255, 255, 0.6)',
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  PT
+                </button>
+                <button
+                  onClick={() => setLanguage("en")}
+                  style={{
+                    padding: '6px 14px',
+                    borderRadius: '100px',
+                    border: 'none',
+                    fontSize: '0.85rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    backgroundColor: language === 'en' ? 'var(--accent)' : 'transparent',
+                    color: language === 'en' ? '#08080C' : 'rgba(255, 255, 255, 0.6)',
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  EN
+                </button>
+              </div>
+
+              {/* Download PT Button */}
+              <button
+                onClick={() => handlePrint("pt")}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  backgroundColor: language === 'pt' ? 'var(--accent)' : 'rgba(255, 255, 255, 0.03)',
+                  color: language === 'pt' ? '#08080C' : '#fff',
+                  border: language === 'pt' ? 'none' : '1px solid rgba(255, 255, 255, 0.1)',
+                  fontWeight: 600,
+                  fontSize: '0.9rem',
+                  padding: '10px 20px',
+                  borderRadius: '100px',
+                  cursor: 'pointer',
+                  boxShadow: language === 'pt' ? '0 10px 20px rgba(207, 170, 105, 0.15)' : 'none',
+                  transition: 'all 0.3s ease'
+                }}
+                className={language === 'pt' ? 'btn-print-action' : 'hover-gold-border'}
+              >
+                <Download size={16} />
+                {t.downloadPt}
+              </button>
+
+              {/* Download EN Button */}
+              <button
+                onClick={() => handlePrint("en")}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  backgroundColor: language === 'en' ? 'var(--accent)' : 'rgba(255, 255, 255, 0.03)',
+                  color: language === 'en' ? '#08080C' : '#fff',
+                  border: language === 'en' ? 'none' : '1px solid rgba(255, 255, 255, 0.1)',
+                  fontWeight: 600,
+                  fontSize: '0.9rem',
+                  padding: '10px 20px',
+                  borderRadius: '100px',
+                  cursor: 'pointer',
+                  boxShadow: language === 'en' ? '0 10px 20px rgba(207, 170, 105, 0.15)' : 'none',
+                  transition: 'all 0.3s ease'
+                }}
+                className={language === 'en' ? 'btn-print-action' : 'hover-gold-border'}
+              >
+                <Download size={16} />
+                {t.downloadEn}
+              </button>
+            </div>
           </div>
 
           {/* Curriculum Grid Layout */}
@@ -161,7 +537,7 @@ export default function CurriculoPage() {
                     Thiago Lamberti
                   </h1>
                   <p style={{ color: 'var(--accent)', fontWeight: 600, fontSize: '1.2rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-                    Engenheiro de Software Sênior
+                    {t.role}
                   </p>
                 </div>
 
@@ -183,7 +559,7 @@ export default function CurriculoPage() {
                   </a>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--foreground)', fontSize: '0.95rem' }}>
                     <MapPin size={16} className="text-accent" />
-                    São Paulo - SP, Brasil
+                    {t.location}
                   </div>
                   <a href="https://thiagolamberti.com.br" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--foreground)', textDecoration: 'none', fontSize: '0.95rem' }} className="hover-gold-text">
                     <Globe size={16} className="text-accent" />
@@ -214,10 +590,10 @@ export default function CurriculoPage() {
                 }}>
                   <h2 className="serif text-xl" style={{ display: 'flex', alignItems: 'center', gap: '10px', borderBottom: '1px solid rgba(207, 170, 105, 0.2)', paddingBottom: '12px', marginBottom: '16px', color: '#fff' }}>
                     <Brain size={20} className="text-accent" />
-                    Sobre Mim
+                    {t.aboutTitle}
                   </h2>
                   <p style={{ fontSize: '0.95rem', lineHeight: '1.7', color: '#94a3b8', textAlign: 'justify' }}>
-                    Sou Engenheiro de Software Sênior com sólida experiência liderando equipes técnicas, arquitetando soluções escaláveis e integrando inteligência artificial para otimização de processos de negócio. Focado em alinhar excelência técnica com impacto operacional, domino o ciclo completo de desenvolvimento de software: desde a concepção da infraestrutura em nuvem (Docker, CI/CD) até o desenvolvimento robusto do backend (NodeJS, Python, C# .NET) e frontend (React, Next.js). Sou cofundador de iniciativas digitais e especialista em solucionar gargalos complexos de dados e sistemas legados por meio de processos claros, automações ágeis (Scrum) e inovação pragmática.
+                    {t.aboutText}
                   </p>
                 </div>
 
@@ -232,32 +608,10 @@ export default function CurriculoPage() {
                 }}>
                   <h2 className="serif text-xl" style={{ display: 'flex', alignItems: 'center', gap: '10px', borderBottom: '1px solid rgba(207, 170, 105, 0.2)', paddingBottom: '12px', marginBottom: '20px', color: '#fff' }}>
                     <Code size={20} className="text-accent" />
-                    Hard Skills
+                    {t.hardSkillsTitle}
                   </h2>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }} className="skills-wrap">
-                    {[
-                      "Arquitetura de Software",
-                      "Desenvolvimento Backend",
-                      "Desenvolvimento Front-end",
-                      "NodeJS",
-                      "C# ASP.NET Core",
-                      "Python",
-                      "React",
-                      "Next.js",
-                      "Vite",
-                      "TypeScript / JavaScript",
-                      "PostgreSQL",
-                      "SQL Server",
-                      "Oracle SQL",
-                      "Google Cloud Platform",
-                      "Docker / Containers",
-                      "Linux",
-                      "Integração de IA (LLMs)",
-                      "CI/CD (CircleCI)",
-                      "Lógica de programação",
-                      "Git & TFS",
-                      "Inglês (Avançado)"
-                    ].map((skill, index) => (
+                    {t.hardSkills.map((skill, index) => (
                       <span
                         key={index}
                         style={{
@@ -289,20 +643,10 @@ export default function CurriculoPage() {
                 }}>
                   <h2 className="serif text-xl" style={{ display: 'flex', alignItems: 'center', gap: '10px', borderBottom: '1px solid rgba(207, 170, 105, 0.2)', paddingBottom: '12px', marginBottom: '20px', color: '#fff' }}>
                     <Brain size={20} className="text-accent" />
-                    Soft Skills
+                    {t.softSkillsTitle}
                   </h2>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }} className="skills-wrap">
-                    {[
-                      "Liderança Técnica",
-                      "Comunicação Eficiente",
-                      "Proatividade",
-                      "Resolução de Problemas",
-                      "Gestão de Prioridades",
-                      "Organização Ágil",
-                      "Adaptabilidade Tecnológica",
-                      "Trabalho em Equipe",
-                      "Criatividade"
-                    ].map((skill, index) => (
+                    {t.softSkills.map((skill, index) => (
                       <span
                         key={index}
                         style={{
@@ -334,28 +678,23 @@ export default function CurriculoPage() {
                 }}>
                   <h2 className="serif text-xl" style={{ display: 'flex', alignItems: 'center', gap: '10px', borderBottom: '1px solid rgba(207, 170, 105, 0.2)', paddingBottom: '12px', marginBottom: '20px', color: '#fff' }}>
                     <GraduationCap size={20} className="text-accent" />
-                    Educação
+                    {t.educationTitle}
                   </h2>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                    <div className="education-item" style={{ borderLeft: '2px solid var(--accent)', paddingLeft: '14px' }}>
-                      <h4 style={{ fontSize: '0.95rem', fontWeight: 600, color: '#fff' }}>Bacharel em Sistemas de Informação</h4>
-                      <p style={{ fontSize: '0.85rem', color: 'var(--accent)', margin: '4px 0' }}>Fundação Santo André</p>
-                      <p style={{ fontSize: '0.8rem', color: '#64748b' }}>2014 - 2017</p>
-                    </div>
+                    {t.educationItems.map((item, index) => (
+                      <div key={index} className="education-item" style={{ borderLeft: '2px solid var(--accent)', paddingLeft: '14px' }}>
+                        <h4 style={{ fontSize: '0.95rem', fontWeight: 600, color: '#fff' }}>{item.degree}</h4>
+                        <p style={{ fontSize: '0.85rem', color: 'var(--accent)', margin: '4px 0' }}>{item.school}</p>
+                        <p style={{ fontSize: '0.8rem', color: '#64748b' }}>{item.date}</p>
+                      </div>
+                    ))}
 
                     <div className="education-item" style={{ borderLeft: '2px solid var(--accent)', paddingLeft: '14px' }}>
-                      <h4 style={{ fontSize: '0.95rem', fontWeight: 600, color: '#fff' }}>Pós-graduação em Projetos de Aplicativos Móveis Multiplataforma</h4>
-                      <p style={{ fontSize: '0.85rem', color: 'var(--accent)', margin: '4px 0' }}>Descomplica Faculdade Digital</p>
-                      <p style={{ fontSize: '0.8rem', color: '#64748b' }}>2023 - 2024</p>
-                    </div>
-
-                    <div className="education-item" style={{ borderLeft: '2px solid var(--accent)', paddingLeft: '14px' }}>
-                      <h4 style={{ fontSize: '0.95rem', fontWeight: 600, color: '#fff' }}>Desenvolvimento Contínuo & Negócios</h4>
+                      <h4 style={{ fontSize: '0.95rem', fontWeight: 600, color: '#fff' }}>{t.continuousTitle}</h4>
                       <ul style={{ paddingLeft: '14px', marginTop: '6px', fontSize: '0.8rem', color: '#94a3b8', listStyleType: 'disc' }}>
-                        <li>Wise Minds - Prof. Murilo Frizanco (Permanente)</li>
-                        <li>Escola de Formação de Líderes - Instituto LIBCOM (2017)</li>
-                        <li>Comunidade Priscilla Zillo (Lançamentos Digitais)</li>
-                        <li>Escola da Co-produção (Mac Carvalho)</li>
+                        {t.continuousItems.map((item, index) => (
+                          <li key={index}>{item}</li>
+                        ))}
                       </ul>
                     </div>
                   </div>
@@ -376,168 +715,35 @@ export default function CurriculoPage() {
                 }}>
                   <h2 className="serif text-2xl" style={{ display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '1px solid rgba(207, 170, 105, 0.2)', paddingBottom: '16px', marginBottom: '32px', color: '#fff' }}>
                     <Briefcase size={22} className="text-accent" />
-                    Experiência Profissional
+                    {t.experienceTitle}
                   </h2>
 
                   {/* Timeline container */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '40px', position: 'relative' }} className="timeline-container">
 
-                    {/* Immaculata Digital */}
-                    <div style={{ position: 'relative', paddingLeft: '24px' }} className="timeline-item">
-                      <div className="timeline-dot"></div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '8px', marginBottom: '8px' }}>
-                        <div>
-                          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#fff' }}>Engenheiro de Software Sênior</h3>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px', color: 'var(--accent)' }}>
-                            <Building2 size={14} />
-                            <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>Immaculata Digital</span>
+                    {t.experiences.map((exp, index) => (
+                      <div key={index} style={{ position: 'relative', paddingLeft: '24px' }} className="timeline-item">
+                        <div className="timeline-dot"></div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '8px', marginBottom: '8px' }}>
+                          <div>
+                            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#fff' }}>{exp.role}</h3>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px', color: 'var(--accent)' }}>
+                              <Building2 size={14} />
+                              <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>{exp.company}</span>
+                            </div>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(207, 170, 105, 0.1)', border: '1px solid rgba(207, 170, 105, 0.2)', padding: '4px 12px', borderRadius: '100px', fontSize: '0.8rem', color: 'var(--accent)', fontWeight: 500 }} className="timeline-date">
+                            <Calendar size={12} />
+                            {exp.date}
                           </div>
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(207, 170, 105, 0.1)', border: '1px solid rgba(207, 170, 105, 0.2)', padding: '4px 12px', borderRadius: '100px', fontSize: '0.8rem', color: 'var(--accent)', fontWeight: 500 }} className="timeline-date">
-                          <Calendar size={12} />
-                          Novembro de 2025 - Atualmente
-                        </div>
+                        <ul style={{ paddingLeft: '18px', color: '#94a3b8', fontSize: '0.9rem', lineHeight: '1.7', listStyleType: 'disc' }} className="timeline-desc-list">
+                          {exp.bullets.map((bullet, idx) => (
+                            <li key={idx} dangerouslySetInnerHTML={{ __html: bullet }} />
+                          ))}
+                        </ul>
                       </div>
-                      <ul style={{ paddingLeft: '18px', color: '#94a3b8', fontSize: '0.9rem', lineHeight: '1.7', listStyleType: 'disc' }} className="timeline-desc-list">
-                        <li><strong>Arquitetura e Engenharia de Dados:</strong> Desenho e implantação de infraestrutura assíncrona com RabbitMQ para orquestração de processamento de disparos massivos em segundo plano (Workers) sem concorrência ou travamentos no banco de dados.</li>
-                        <li><strong>Persistência Híbrida:</strong> Fluxo operacional resiliente dividindo o tráfego volátil em mensageria rápida e a persistência histórica de auditoria e métricas em banco de dados relacional PostgreSQL.</li>
-                        <li><strong>Multi-Tenancy Corporativa:</strong> Sustentação de arquitetura multi-tenant robusta para isolamento lógico e gestão segura de múltiplos CNPJs, holdings e franquias sob controle de acesso baseado em funções (RBAC).</li>
-                        <li><strong>Microsserviços Dinâmicos:</strong> Engenharia de microsserviços e Workers que interpretam chaves e parametrizações externas dinâmicas em tempo de execução para cada inquilino (tenant).</li>
-                        <li><strong>IA e Engenharia de IA (AI Engineering):</strong> Orquestração e implantação local dedicada do modelo Gemma (Google) para privacidade de dados corporativos e redução drástica de custos operacionais com APIs pagas.</li>
-                        <li><strong>Contextualização de Negócio com IA:</strong> Integração de modelos de linguagem locais para inteligência cruzada entre os módulos de gestão e fidelidade, gerando textos analíticos e respostas preditivas automáticas.</li>
-                        <li><strong>Componentização No-Code:</strong> Desenvolvimento de módulo construtor visual de sites (arrastar e soltar) integrado a APIs de relacionamento e CRM em tempo real.</li>
-                        <li><strong>Vertical Food Service:</strong> Engenharia ponta a ponta da vertical para restaurantes conectando cardápios digitais dinâmicos, mapeamento físico de mesas e sistema de telas de produção de cozinha (KDS) em tempo real.</li>
-                        <li><strong>Renderização Híbrida e SEO/AIO:</strong> Otimização de performance web com Next.js (App Router), SSR/SSG e Core Web Vitals, além de estruturação de metadados semânticos avançados (Schema Markup) para otimização de buscas tradicionais e por modelos de IA (AIO).</li>
-                      </ul>
-                    </div>
-
-                    {/* Taxation Mind */}
-                    <div style={{ position: 'relative', paddingLeft: '24px' }} className="timeline-item">
-                      <div className="timeline-dot"></div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '8px', marginBottom: '8px' }}>
-                        <div>
-                          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#fff' }}>Engenheiro de Software Sênior / Tech Lead</h3>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px', color: 'var(--accent)' }}>
-                            <Building2 size={14} />
-                            <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>Taxation Mind</span>
-                          </div>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(207, 170, 105, 0.1)', border: '1px solid rgba(207, 170, 105, 0.2)', padding: '4px 12px', borderRadius: '100px', fontSize: '0.8rem', color: 'var(--accent)', fontWeight: 500 }} className="timeline-date">
-                          <Calendar size={12} />
-                          2023 - Novembro de 2025
-                        </div>
-                      </div>
-                      <ul style={{ paddingLeft: '18px', color: '#94a3b8', fontSize: '0.9rem', lineHeight: '1.7', listStyleType: 'disc' }} className="timeline-desc-list">
-                        <li>Liderança técnica de equipes de desenvolvimento integrando metodologias ágeis (Scrum/Kanban) para acelerar entregas de produtos.</li>
-                        <li>Implementação pioneira de Inteligência Artificial Generativa e fine-tuning de modelos LLM (OpenAI) em processos analíticos e fluxos internos da empresa.</li>
-                        <li>Desenvolvimento de sistemas robustos Full Stack ponta a ponta utilizando NodeJS, Python e bibliotecas modernas baseadas em React.</li>
-                        <li>Liderança de processos de transformação e migração estruturada de dados em larga escala a partir de sistemas legados.</li>
-                        <li>Atuação em engenharia tributária e contábil como Product Owner, garantindo alinhamento fino entre regras de negócio complexas e soluções tecnológicas.</li>
-                        <li>Concepção, refinamento e manutenção de base de dados relacionais PostgreSQL complexos (operações DDL e DML de alto desempenho).</li>
-                        <li>Desenho e execução de pipelines de dados integrados (ETL) utilizando ferramentas como Pentaho Kettle.</li>
-                        <li>Orquestração e conteneirização de serviços de infraestrutura corporativos baseados em Docker e distribuições Linux.</li>
-                        <li>Criação, parametrização e manutenção de relatórios operacionais críticos em Jasper Reports.</li>
-                      </ul>
-                    </div>
-
-                    {/* SinergyRH */}
-                    <div style={{ position: 'relative', paddingLeft: '24px' }} className="timeline-item">
-                      <div className="timeline-dot"></div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '8px', marginBottom: '8px' }}>
-                        <div>
-                          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#fff' }}>Desenvolvedor Fullstack Sênior / Arquiteto</h3>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px', color: 'var(--accent)' }}>
-                            <Building2 size={14} />
-                            <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>SinergyRH</span>
-                          </div>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(207, 170, 105, 0.1)', border: '1px solid rgba(207, 170, 105, 0.2)', padding: '4px 12px', borderRadius: '100px', fontSize: '0.8rem', color: 'var(--accent)', fontWeight: 500 }} className="timeline-date">
-                          <Calendar size={12} />
-                          2022 - 2023
-                        </div>
-                      </div>
-                      <ul style={{ paddingLeft: '18px', color: '#94a3b8', fontSize: '0.9rem', lineHeight: '1.7', listStyleType: 'disc' }} className="timeline-desc-list">
-                        <li>Análise de impacto técnico e desenvolvimento de arquiteturas escaláveis para processamento de folhas de pagamento em lote usando stack C# .NET MVC.</li>
-                        <li>Estruturação e otimização de queries, views e procedures de banco de dados SQL Server de alto desempenho.</li>
-                        <li>Colaboração direta com equipes de Engenharia de Produto para especificação refinada de demandas e transformação de especificações em arquitetura de software sólida.</li>
-                        <li>Parceria próxima com times de QA (Testes) e Suporte Técnico N3 garantindo o cumprimento de Service Level Agreements (SLA) e alta qualidade geral de software.</li>
-                        <li>Gerenciamento de repositórios distribuídos e versionamento estruturado utilizando TFS (Team Foundation Server).</li>
-                      </ul>
-                    </div>
-
-                    {/* Camara dos deputados */}
-                    <div style={{ position: 'relative', paddingLeft: '24px' }} className="timeline-item">
-                      <div className="timeline-dot"></div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '8px', marginBottom: '8px' }}>
-                        <div>
-                          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#fff' }}>Engenheiro de Software Fullstack</h3>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px', color: 'var(--accent)' }}>
-                            <Building2 size={14} />
-                            <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>Câmara dos Deputados</span>
-                          </div>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(207, 170, 105, 0.1)', border: '1px solid rgba(207, 170, 105, 0.2)', padding: '4px 12px', borderRadius: '100px', fontSize: '0.8rem', color: 'var(--accent)', fontWeight: 500 }} className="timeline-date">
-                          <Calendar size={12} />
-                          2019 - 2022
-                        </div>
-                      </div>
-                      <ul style={{ paddingLeft: '18px', color: '#94a3b8', fontSize: '0.9rem', lineHeight: '1.7', listStyleType: 'disc' }} className="timeline-desc-list">
-                        <li>Concepção, arquitetura e desenvolvimento de sistemas integrados corporativos Web e Mobile rodando em arquiteturas resilientes de microsserviços.</li>
-                        <li>Modelagem de banco de dados relacionais PostgreSQL e versionamento contínuo sob padrão rigoroso de Gitflow.</li>
-                        <li>Facilitação de ritos ágeis (Scrum/Kanban) e organização de fluxos de trabalho para otimizar as entregas e a coordenação do time técnico.</li>
-                        <li>Mapeamento técnico e levantamento ágil de requisitos e necessidades diretamente com stakeholders, usuários chave e órgãos técnicos solicitantes.</li>
-                        <li>Exercício de articulação técnica e comunicação executiva facilitando decisões em múltiplos níveis de governança de TI.</li>
-                      </ul>
-                    </div>
-
-                    {/* Prescon Informatica */}
-                    <div style={{ position: 'relative', paddingLeft: '24px' }} className="timeline-item">
-                      <div className="timeline-dot"></div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '8px', marginBottom: '8px' }}>
-                        <div>
-                          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#fff' }}>Desenvolvedor Fullstack C# .NET</h3>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px', color: 'var(--accent)' }}>
-                            <Building2 size={14} />
-                            <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>Prescon Informática e Assessoria</span>
-                          </div>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(207, 170, 105, 0.1)', border: '1px solid rgba(207, 170, 105, 0.2)', padding: '4px 12px', borderRadius: '100px', fontSize: '0.8rem', color: 'var(--accent)', fontWeight: 500 }} className="timeline-date">
-                          <Calendar size={12} />
-                          2018 - 2019
-                        </div>
-                      </div>
-                      <ul style={{ paddingLeft: '18px', color: '#94a3b8', fontSize: '0.9rem', lineHeight: '1.7', listStyleType: 'disc' }} className="timeline-desc-list">
-                        <li>Desenvolvimento fullstack de plataformas Web corporativas na área da saúde pública e privada com foco em ASP.NET (C#) e injeção assíncrona de JavaScript, HTML5 e CSS3.</li>
-                        <li>Esquemas de dados complexos: criação de Stored Procedures, Views de consolidação, triggers reativas, além de políticas de backup/restore sob infraestruturas Microsoft SQL Server.</li>
-                        <li>Gerenciamento automatizado de migrações estruturais de bancos de dados via SQL Source Control e versionamento de código no Plastic SCM.</li>
-                        <li>Resolução analítica de conflitos de migração com ApexSQL Diff e exportação direta de dados de auditoria integrados a planilhas Excel/Google Sheets.</li>
-                      </ul>
-                    </div>
-
-                    {/* Gol */}
-                    <div style={{ position: 'relative', paddingLeft: '24px' }} className="timeline-item">
-                      <div className="timeline-dot"></div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '8px', marginBottom: '8px' }}>
-                        <div>
-                          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#fff' }}>Engenheiro de Dados e Sistemas / Auditor de TI</h3>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px', color: 'var(--accent)' }}>
-                            <Building2 size={14} />
-                            <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>GOL Linhas Aéreas Inteligentes</span>
-                          </div>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(207, 170, 105, 0.1)', border: '1px solid rgba(207, 170, 105, 0.2)', padding: '4px 12px', borderRadius: '100px', fontSize: '0.8rem', color: 'var(--accent)', fontWeight: 500 }} className="timeline-date">
-                          <Calendar size={12} />
-                          2015 - 2018
-                        </div>
-                      </div>
-                      <ul style={{ paddingLeft: '18px', color: '#94a3b8', fontSize: '0.9rem', lineHeight: '1.7', listStyleType: 'disc' }} className="timeline-desc-list">
-                        <li>Desenvolvimento de automações corporativas e relatórios de BI avançados utilizando algoritmos em VBA integrados diretamente com bases de dados relacionais corporativas Oracle SQL.</li>
-                        <li>Construção de rotinas integradas e relatórios gerenciais focados em regras de negócio complexas a partir do ERP SAP.</li>
-                        <li>Estruturação e extração automatizada de dados em ambientes Oracle, operando com ACL Analytics e scripts personalizados em SQL.</li>
-                        <li>Execução técnica de auditorias de TI internas, levantamento de evidências computacionais corporativas e análise de conformidade de infraestrutura.</li>
-                        <li>Validação técnica e documentação especializada para certificações globais corporativas sob frameworks COBIT e normas da Lei Sarbanes-Oxley (SOX).</li>
-                      </ul>
-                    </div>
+                    ))}
 
                   </div>
                 </div>
