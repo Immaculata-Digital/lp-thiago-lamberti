@@ -549,9 +549,9 @@ export default function CurriculoPage() {
                   gap: '20px',
                   color: 'var(--foreground)'
                 }} className="contact-list-horizontal">
-                  <a href="mailto:thiago.lsanches2@gmail.com" style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--foreground)', textDecoration: 'none', fontSize: '0.95rem' }} className="hover-gold-text">
+                  <a href="mailto:contato@thiagolamberti.com.br" style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--foreground)', textDecoration: 'none', fontSize: '0.95rem' }} className="hover-gold-text">
                     <Mail size={16} className="text-accent" />
-                    thiago.lsanches2@gmail.com
+                    contato@thiagolamberti.com.br
                   </a>
                   <a href="https://wa.me/5511941321003" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--foreground)', textDecoration: 'none', fontSize: '0.95rem' }} className="hover-gold-text">
                     <Phone size={16} className="text-accent" />
