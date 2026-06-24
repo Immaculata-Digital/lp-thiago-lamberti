@@ -549,22 +549,26 @@ export default function CurriculoPage() {
                   gap: '20px',
                   color: 'var(--foreground)'
                 }} className="contact-list-horizontal">
-                  <a href="mailto:contato@thiagolamberti.com.br" style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--foreground)', textDecoration: 'none', fontSize: '0.95rem' }} className="hover-gold-text">
-                    <Mail size={16} className="text-accent" />
-                    contato@thiagolamberti.com.br
-                  </a>
-                  <a href="https://wa.me/5511941321003" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--foreground)', textDecoration: 'none', fontSize: '0.95rem' }} className="hover-gold-text">
-                    <Phone size={16} className="text-accent" />
-                    (11) 9 4132-1003
-                  </a>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--foreground)', fontSize: '0.95rem' }}>
-                    <MapPin size={16} className="text-accent" />
-                    {t.location}
+                  <div className="contact-row" style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+                    <a href="mailto:contato@thiagolamberti.com.br" style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--foreground)', textDecoration: 'none', fontSize: '0.95rem' }} className="hover-gold-text">
+                      <Mail size={16} className="text-accent" />
+                      contato@thiagolamberti.com.br
+                    </a>
+                    <a href="https://wa.me/5511941321003" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--foreground)', textDecoration: 'none', fontSize: '0.95rem' }} className="hover-gold-text">
+                      <Phone size={16} className="text-accent" />
+                      (11) 9 4132-1003
+                    </a>
                   </div>
-                  <a href="https://thiagolamberti.com.br" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--foreground)', textDecoration: 'none', fontSize: '0.95rem' }} className="hover-gold-text">
-                    <Globe size={16} className="text-accent" />
-                    thiagolamberti.com.br
-                  </a>
+                  <div className="contact-row" style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--foreground)', fontSize: '0.95rem' }}>
+                      <MapPin size={16} className="text-accent" />
+                      {t.location}
+                    </div>
+                    <a href="https://thiagolamberti.com.br" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--foreground)', textDecoration: 'none', fontSize: '0.95rem' }} className="hover-gold-text">
+                      <Globe size={16} className="text-accent" />
+                      thiagolamberti.com.br
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -824,13 +828,13 @@ export default function CurriculoPage() {
         }
 
         /* Screen Media Queries */
-        @media (max-width: 991px) {
+        @media screen and (max-width: 991px) {
           .layout-split {
             grid-template-columns: 1fr !important;
           }
         }
 
-        @media (max-width: 768px) {
+        @media screen and (max-width: 768px) {
           .header-card {
             flex-direction: column !important;
             align-items: stretch !important;
@@ -964,23 +968,30 @@ export default function CurriculoPage() {
 
           .contact-list-horizontal {
             display: flex !important;
-            flex-direction: row !important;
-            flex-wrap: nowrap !important;
-            gap: 12pt !important;
+            flex-direction: column !important;
+            gap: 4pt !important;
             margin-top: 6px !important;
-            align-items: center !important;
+            align-items: flex-start !important;
           }
 
-          .contact-list-horizontal a, .contact-list-horizontal div {
+          .contact-row {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            gap: 16pt !important;
+            width: 100% !important;
+          }
+
+          .contact-row a, .contact-row div {
             color: #4A5568 !important;
-            font-size: 8pt !important;
+            font-size: 8.5pt !important;
             display: flex !important;
             align-items: center !important;
             gap: 4px !important;
             white-space: nowrap !important;
           }
 
-          .contact-list-horizontal svg {
+          .contact-row svg {
             color: #997430 !important;
             width: 11px !important;
             height: 11px !important;
